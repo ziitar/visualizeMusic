@@ -1,0 +1,132 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="container-fluid app-container">
+  <div class="row app-content">
+    <div class="col-md-4 app-menu app-col-3">
+      <div class="action-bar" [ngSwitch]="actionType">
+        <div class="logo">可视化音乐网站</div>
+        <div class="action user" *ngIf="!user">
+          <button type="button" class="btn btn-primary action-user" data-toggle="modal" data-target="#user-modal">登录</button><span class="login-title"> --你还没登录，登录使用更多功能</span>
+        </div>
+        <div class="action user" *ngIf="user">
+          <div class="user-box">
+            <div class="user-head">
+              <img src="{{user.headUrl}}" alt="">
+            </div>
+            <div class="user-detail">
+              <div class="user-name">{{user.userName}}</div>
+              <div class="user-sheet">
+                <span class="user-create">创建了 {{user.sheets.length}} 歌单</span>
+                <span class="user-collection">收藏了 {{user.loveSheets.length}} 歌单</span>
+              </div>
+            </div>
+            <div class="user-out" (click)="signOut()"></div>
+          </div>
+        </div>
+        <div class="action action-active">
+          <div class="action-title" (click)="recommend()">推荐歌单</div>
+          <app-music-sheet [playSong]="song" [playSheet]="sheet" [sheetType]="1" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" *ngSwitchCase="1"></app-music-sheet>
+        </div>
+        <!--<div class="action">-->
+          <!--<div class="action-title" (click)="local()">本地歌单</div>-->
+          <!--<app-music-sheet [playSong]="song" [playSheet]="sheet" [sheetType]="2" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" *ngSwitchCase="2"></app-music-sheet>-->
+        <!--</div>-->
+        <div class="action">
+          <div class="action-title" (click)="mine()">我创建的歌单</div>
+          <div *ngSwitchCase="3">
+            <app-music-sheet [playSong]="song" [playSheet]="sheet" [sheetType]="3" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" ></app-music-sheet>
+            <div class="sheet-list" >
+              <div class="create-sheet" data-toggle="modal" data-target="#sheet-modal">创建歌单</div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="action">-->
+          <!--<div class="action-title" (click)="collection()">我收藏的歌单</div>-->
+          <!--<app-music-sheet [playSong]="song" [playSheet]="sheet" [sheetType]="4" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" *ngSwitchCase="4"></app-music-sheet>-->
+        <!--</div>-->
+      </div>
+    </div>
+    <div class="col-md-8 app-router app-col-7">
+      <div class="app-router-center">
+        <div class="canvas-box" id="audio-box" [hidden]="main">
+          <canvas id="canvas"></canvas>
+        </div>
+        <audio id="audio"></audio>
+        <div class="router-box">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row app-footer">
+    <div class="col-md-4 app-col-3">
+      <div class="navbar menu">
+        <div class="navbar-header">
+          <button class="navbar-toggle collapsed" type="button" data-target="#navbar-collapse" data-toggle="collapse">
+            <span class="sr-only">toggle navgation</span>
+            <span class="icon-bar" style="background-color: white"> </span>
+            <span class="icon-bar" style="background-color: white"> </span>
+            <span class="icon-bar" style="background-color: white"> </span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav navbar-right app-navbar">
+            <li routerLink="/main" routerLinkActive="active"><a (click)="toMain(false)">首页</a></li>
+            <!--<li routerLink="/lyric" routerLinkActive="active"><a>歌词</a></li>-->
+            <!--<li routerLink="/comment" routerLinkActive="active"><a>评论</a></li>-->
+            <li routerLink="/search" routerLinkActive="active"><a (click)="toMain(true)">搜索</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 app-col-7">
+      <div class="control">
+        <button class="play" [disabled]="playMusicStatus.name=='' ? 'disabled' : ''"  [style.background-position]="playMusicStatus.played ? '-92px 0' : '-46px 0'" (click)="isPlay()"></button>
+        <button class="last-song" (click)="prePlay()"></button>
+        <div class="range-div">
+          <div class="range-center-div">
+            <input type="range" class="range" value="{{playMusicStatus.rangeValue}}" (change)="setRange($event)"   min="0" max="100" step="0.001">
+          </div>
+        </div>
+        <button class="volume">
+        </button>
+        <div class="volume-div">
+          <div class="volume-center-div" >
+            <input type="range"  class="volume-range" min="0" max="100" step="1" value="{{playMusicStatus.volume}}" (click)="setVolume($event)">
+          </div>
+        </div>
+        <button class="next-song" (click)="nextPlay()"></button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-user (user)="setUser($event)"></app-user>
+
+<div class="modal fade bs-example-modal-sm" id="sheet-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">创建歌单</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" (ngSubmit)="createSheet()"  #sheetForm="ngForm">
+          <div class="form-group" >
+            <label for="sheetName" class="col-sm-2 control-label">歌单名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="sheetName" id="sheetName"
+                     required
+                     [(ngModel)]="model.sheetName">
+            </div>
+          </div>
+          <div class="flex-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" *ngIf="createSheetMessage">
+        {{createSheetMessage}}
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

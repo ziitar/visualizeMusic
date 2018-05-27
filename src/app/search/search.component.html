@@ -1,0 +1,41 @@
+<div class="container-fluid app-search">
+  <div class="row" style="width: 100%;">
+    <div class="col-md-offset-2 col-md-8">
+      <input type="text" class="search" #searchBox >
+      <span class="search-icon" (click)="doSearch(searchBox.value)"></span>
+      <!--<ul class="search-result">-->
+        <!--<li *ngFor="let result of resulted | async" (click)="dosearch(result)">-->
+          <!--{{result}}-->
+        <!--</li>-->
+      <!--</ul>-->
+    </div>
+  </div>
+  <div class="row" style="width: 100%;" *ngIf="resulted">
+    <div class="app-search-table">
+      <table class="table">
+        <tr class="table-head">
+          <td>歌名</td>
+          <td>歌手</td>
+          <td>专辑</td>
+          <td>操作</td>
+        </tr>
+        <tr *ngFor="let result of resulted; let i = index">
+          <td>{{result.name}}</td>
+          <td>{{result.artists[0].name}}</td>
+          <td>{{result.album.name}}</td>
+          <td>
+            <div class="add-sheet" (click)="selectSheet(i)">
+              添加歌单
+              <ul class="add-sheet-list" *ngIf="sheets && i == resultIndex">
+                <li *ngFor="let sheet of sheets" (click)="addToSheet(sheet._id,result)">
+                  {{sheet.sheetName}}
+                </li>
+                <li>{{sheetMessage}}</li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+
+.sheet-list{
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.sheet{
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #ff9db5;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.sheet:hover{
+  background: rgba(0,0,0,0.3);
+}
+.sheet-operation{
+  flex: 0 0 auto;
+}
+.sheet-operation::after{
+  content: '\e70d';
+  font-family: iconfont;
+  font-size: 20px;
+}
+.sheet-active .sheet-operation::after{
+  content: '\e70c';
+}
+.sheet-detail {
+  padding-left: 25px;
+  overflow: hidden;
+  position: relative;
+}
+
+.sheet-detail::before{
+  content: '\e633';
+  font-family: iconfont;
+  font-size: 20px;
+  position: absolute;
+  left: 0;
+  line-height: 37px;
+}
+.sheet-detail .sheet-name{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sheet-detail .sheet-num{
+  font-size: 12px;
+  color: #ff9db5;
+}
+.music-list{
+  padding-left: 10px;
+}
+
+.music-list li{
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.music-list li:hover{
+  background: rgba(0,0,0,0.2);
+}
+.music-list li .music-detail{
+  position: relative;
+  padding-left: 25px;
+  flex: 1 0 auto;
+  overflow: hidden;
+}
+.music-list li .music-active{
+  background: rgba(0,0,0,0.3);
+}
+.music-list li .music-detail::before{
+  content: '\e6fa';
+  font-family: iconfont;
+  position: absolute;
+  left: 0;
+  font-size: 20px;
+}
+.music-list li .music-active::before{
+  content: '\e6f5';
+  font-family: iconfont;
+  position: absolute;
+  left: 0;
+  font-size: 20px;
+}
+.music-name{
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.music-author{
+  font-size: 12px;
+  color: #ff9db5;
+}
+.music-operation::after{
+  content: '\e6ef';
+  font-family: iconfont;
+  font-size: 20px;
+}
+.music-operation:hover{
+  background: rgba(0,0,0,0.4);
+}
+.hiddenMessage{
+  padding-left: 30px;
+}
