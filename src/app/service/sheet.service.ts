@@ -25,6 +25,13 @@ export class SheetService {
         return Observable.of<Sheet[]>([]);
       });
   }
+  getSongsOfSheetById(id: string): Observable<Sheet> {
+    return this.http.get(this.baseUrl + 'song?id=' + id)
+      .map(res => res.json() as Sheet)
+      .catch(err => {
+        return Observable.of<Sheet>();
+      });
+  }
   getLoveSheet(): Observable<Sheet[]> {
     return this.http.get(this.baseUrl + 'loveSheet')
       .map(res => res.json() as Sheet[])
@@ -46,6 +53,6 @@ export class SheetService {
   }
   addToSheet(data: any ): Observable<any> {
     return this.http.put(this.baseUrl + 'sheet', data)
-      .map(res => res['_body']);
+      .map(res => res);
   }
 }

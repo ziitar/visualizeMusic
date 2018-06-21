@@ -1,3 +1,8 @@
-<p>
-  lyric works!
+<ul class="lyric-box" *ngIf="lyrics">
+  <li *ngFor="let lyric of lyrics">
+    {{lyric.text}}
+  </li>
+</ul>
+<p class="message" *ngIf="!lyrics">
+  {{lyricMessage}}
 </p>

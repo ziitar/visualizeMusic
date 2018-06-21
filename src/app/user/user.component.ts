@@ -77,4 +77,8 @@ export class UserComponent implements OnInit {
         }
       });
   }
+  closeModal() {
+    this.loginMessage = null;
+    this.registerMessage = null;
+  }
 }

@@ -1,5 +1,5 @@
 export class Song {
-  _id: number;
+  _id: string;
   songName: string;
   author: string[];
   url: string;

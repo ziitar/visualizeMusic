@@ -6,6 +6,10 @@ import { Song } from './class/song';
 import { Sheet } from './class/sheet';
 import { User } from './class/user';
 
+import { Subscription } from 'rxjs/Subscription';
+import {SearchService} from './service/search.service';
+import {SongService} from './service/song.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,29 +27,27 @@ export class AppComponent implements OnInit {
   sheet: Sheet;
   actionType;
   audio: any;
-  user: User;
+  user: any;
   main = false;
-  // musicUrlOffset = 'http://localhost:2345/public';
-  musicUrlOffset = '/public';
+  musicUrlOffset = 'http://localhost:2345/public';
+  // musicUrlOffset = '/public';
   model = {
     sheetName: ''
   };
   createSheetMessage: string;
+  subscription: Subscription;
   constructor(
     private el: ElementRef,
     private userService: UserService,
-    private sheetService: SheetService
-  ) { }
+    private sheetService: SheetService,
+    private searchService: SearchService,
+    private songService: SongService
+  ) {
+    this.subscription = searchService.observerChild$.subscribe(sheets => {
+      this.user.sheets = sheets;
+    });
+  }
   ngOnInit(): void {
-    // this.user = {
-    //   _id: '5afd288385697b06e49122dd',
-    //   userName: 'ziiter',
-    //   headUrl: 'http://localhost:2345/public/img/defaultMale.jpg',
-    //   email: 'ziiter@163.com',
-    //   sex: 'male',
-    //   sheets: [],
-    //   loveSheets: [],
-    // };
     /*
     *   初始化组件后获得session中的用户信息
     * */
@@ -54,9 +56,9 @@ export class AppComponent implements OnInit {
         if (res) {
           if (!res.headUrl) {
             if (res.sex === 'male') {
-              res.headUrl = '/public/img/defaultMale.jpg';
+              res.headUrl = 'http://localhost:2345/public/img/defaultMale.jpg';
             }else {
-              res.headUrl = '/public/img/defaultFemale.jpg';
+              res.headUrl = 'http://localhost:2345/public/img/defaultFemale.jpg';
             }
           }
           this.user = res;
@@ -77,13 +79,23 @@ export class AppComponent implements OnInit {
         const lastSongIndex = Math.round(Math.random() * (this.sheet.songNum - 1));
         this.preSong.push(this.song);
         this.song = this.sheet.songs[lastSongIndex];
-        if (this.song.cloudMusicId) {
-          this.playMusicStatus.url = this.song.url;
-        }else {
-          this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
-        }
-        this.loadMusic();
+        this.setUrl();
     });
+  }
+  setUrl() {
+    if (this.song.cloudMusicId) {
+      this.songService.getUrl(this.song.cloudMusicId)
+        .subscribe(res => {
+          this.playMusicStatus.url = res.toString().replace('http://m10.music.126.net/', '/cloudMusic/');
+          // this.playMusicStatus.url = res;
+          this.songService.songChange(this.song);
+          this.loadMusic();
+        });
+    }else {
+      this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
+      this.songService.songChange(this.song);
+      this.loadMusic();
+    }
   }
   /*
   *   加载audio并进行播放
@@ -129,12 +141,7 @@ export class AppComponent implements OnInit {
   prePlay() {
     if (this.preSong.length !== 0) {
       this.song = this.preSong.shift();
-      if (this.song.cloudMusicId) {
-        this.playMusicStatus.url = this.song.url;
-      }else {
-        this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
-      }
-      this.loadMusic();
+      this.setUrl();
     }
   }
   nextPlay() {
@@ -142,8 +149,7 @@ export class AppComponent implements OnInit {
       const lastSongIndex = Math.round(Math.random() * (this.sheet.songNum - 1));
       this.preSong.push(this.song);
       this.song = this.sheet.songs[lastSongIndex];
-      this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
-      this.loadMusic();
+      this.setUrl();
     }
   }
   recommend() {
@@ -162,20 +168,10 @@ export class AppComponent implements OnInit {
     if (this.song) {
       this.preSong.push(this.song);
       this.song = song;
-      if (this.song.cloudMusicId) {
-        this.playMusicStatus.url = this.song.url;
-      }else {
-        this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
-      }
-      this.loadMusic();
+      this.setUrl();
     }else {
       this.song = song;
-      if (this.song.cloudMusicId) {
-        this.playMusicStatus.url = this.song.url;
-      }else {
-        this.playMusicStatus.url = this.musicUrlOffset + this.song.url;
-      }
-      this.loadMusic();
+      this.setUrl();
     }
   }
   chooseSheet(sheet: Sheet) {
@@ -195,8 +191,9 @@ export class AppComponent implements OnInit {
     if (this.user) {
       this.sheetService.createSheet(this.model)
         .subscribe(res => {
-          console.log(res);
           if (res.status === 200) {
+            this.user.sheets = res.json() as Sheet[];
+            this.searchService.sendSheets(this.user.sheets);
             this.createSheetMessage = '创建成功关闭弹框';
           }else {
             this.createSheetMessage = '创建失败关闭弹框';
@@ -210,11 +207,24 @@ export class AppComponent implements OnInit {
     this.userService.signOut()
       .then(res => {
         if (JSON.parse(res).message === 'ok') {
+          this.audio.stop();
           this.user = null;
+          this.sheet = null;
+          this.song = null;
+          this.preSong = null;
+          this.playMusicStatus = {
+            url: '',
+            played: false,
+            rangeValue: 0,
+            volume: 50
+          };
         }
       });
   }
   toMain(bool) {
     this.main = bool;
+  }
+  closeCreateSheetModal() {
+    this.createSheetMessage = null;
   }
 }

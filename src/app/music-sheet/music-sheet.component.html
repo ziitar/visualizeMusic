@@ -1,5 +1,5 @@
-<ul class="sheet-list" *ngIf="sheets.length !== 0">
-  <li *ngFor="let sheet of sheets; let i=index" [class.sheet-active]="i == selected"  (click)="select(i)">
+<ul class="sheet-list" *ngIf="sheets && sheets.length !== 0">
+  <li *ngFor="let sheet of sheets; let i=index" [class.sheet-active]="i == selected"  (click)="select(i,sheet._id)">
     <div class="sheet">
       <div class="sheet-detail">
         <div class="sheet-name">{{sheet.sheetName}}</div>
@@ -7,9 +7,9 @@
       </div>
       <div class="sheet-operation"></div>
     </div>
-    <ul class="music-list" [hidden]="selected !== i" (click)="stopPropagation($event)">
+    <ul class="music-list" *ngIf="selected === i" (click)="stopPropagation($event)">
       <li *ngFor="let song of sheet.songs" (click)="play(song,sheet)">
-        <div class="music-detail" [class.music-active]="song == playSong">
+        <div class="music-detail" [class.music-active]="song == songs">
           <div class="music-name">{{song.songName}}</div>
           <div class="music-author"><span *ngFor="let author of song.author;let i=index;"><i *ngIf="i!=0">、</i> {{author}} </span></div>
         </div>
@@ -18,5 +18,5 @@
     </ul>
   </li>
 </ul>
-<div class="hiddenMessage" [hidden]="sheets.length !== 0">还没有歌单哦！</div>
+<div class="hiddenMessage" [hidden]="sheets && sheets.length !== 0">还没有歌单哦！</div>
 

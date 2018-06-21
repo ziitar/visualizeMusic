@@ -1,0 +1,39 @@
+.lyric-box{
+  width: 100%;
+  height: 100%;
+  padding: 20px 10px;
+  overflow: auto;
+}
+.lyric-box::-webkit-scrollbar{
+  width: 4px;
+  height: 4px;
+}
+.lyric-box::-webkit-scrollbar-button{
+  display: none;
+}
+.lyric-box::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+.lyric-box::-webkit-scrollbar-thumb{
+  background-color: #ff9db5;
+  border-radius: 5px;
+}
+.lyric-box li{
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+}
+.message{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 18px;
+}

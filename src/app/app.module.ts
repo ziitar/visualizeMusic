@@ -19,7 +19,7 @@ import {SongService} from './service/song.service';
 
 const appRoutes: Routes = [
   { path: 'search', component: SearchComponent},
-  { path: 'lyric', component: LyricComponent},
+  { path: 'lyric/:id', component: LyricComponent},
   { path: 'comment', component: CommentComponent},
   { path: 'main', component: MainComponent},
   { path: '',
@@ -39,7 +39,7 @@ const appRoutes: Routes = [
     MainComponent
   ],
   imports: [
-    RouterModule.forRoot(appRoutes, { enableTracing: true}),
+    RouterModule.forRoot(appRoutes),
     BrowserModule,
     FormsModule,
     HttpModule,

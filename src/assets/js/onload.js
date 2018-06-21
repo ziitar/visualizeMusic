@@ -42,7 +42,7 @@ window.onload=function () {
     ctx.arc(width / 2, height / 2, 30, 0, Math.PI * 2, true);
     ctx.lineWidth = 2;
     ctx.stroke();
-    for (var i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       R = arr[i] / 800 * 50;
       if (R != 0) {
         ctx.beginPath();
