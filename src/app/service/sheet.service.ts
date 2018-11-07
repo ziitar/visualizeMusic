@@ -4,11 +4,11 @@ import 'rxjs/add/operator/toPromise';
 
 import {Sheet} from '../class/sheet';
 import {Observable} from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SheetService {
-  // baseUrl = 'http://localhost:3000/';
-  baseUrl = '/api/';
+  baseUrl = environment.baseUrl;
   constructor(private http: Http) { }
   getRecommend(): Promise<Sheet> {
     return this.http.get(this.baseUrl + 'recommend')

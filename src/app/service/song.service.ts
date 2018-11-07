@@ -4,14 +4,14 @@ import {Http} from '@angular/http';
 
 import { Subject } from 'rxjs/Subject';
 import {Song} from '../class/song';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SongService {
   observerSource = new Subject<Song>();
   observer$ = this.observerSource.asObservable();
 
-  // baseUrl = 'http://localhost:3000/';
-  baseUrl = '/api/';
+  baseUrl = environment.baseUrl;
 
   constructor(private http: Http) { }
   /*

@@ -4,12 +4,12 @@ import 'rxjs/add/operator/toPromise';
 
 import { User } from '../class/user';
 import {Observable} from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
 export class UserService {
-  // userUrl = 'http://localhost:3000/user/';
-  userUrl = '/api/user/';
+  userUrl = environment.baseUrl + 'user/';
   constructor(private http: Http ) { }
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
@@ -18,7 +18,7 @@ export class UserService {
   getUser(): Promise<User> {
     return this.http.get(this.userUrl + 'user')
       .toPromise()
-      .then(res => JSON.parse(res['_body']) as User)
+      .then(res => res.json() as User)
       .catch(this.handleError);
   }
   /*
@@ -27,7 +27,7 @@ export class UserService {
   login(form: any): Promise<any> {
     return this.http.post(this.userUrl + 'login', form)
       .toPromise()
-      .then(res => res['_body'])
+      .then(res => res.json())
       .catch(this.handleError);
   }
   /*
@@ -36,13 +36,13 @@ export class UserService {
   register(form: any): Promise<any> {
     return this.http.post(this.userUrl + 'register', form)
       .toPromise()
-      .then(res => res['_body'])
+      .then(res => res.json())
       .catch(this.handleError);
   }
   chickName(name: string): Promise<any> {
     return this.http.get(this.userUrl + 'name?username=' + name)
       .toPromise()
-      .then(res => res['_body'])
+      .then(res => res.json())
       .catch(this.handleError);
   }
   signOut(): Promise<any> {

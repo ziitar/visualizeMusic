@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import {SearchResult} from '../class/search-result';
 import {Subject } from 'rxjs/Subject';
 import {Sheet} from '../class/sheet';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SearchService {
@@ -15,8 +16,7 @@ export class SearchService {
   observerParent$ = this.observerParentSource.asObservable();
   observerChild$ = this.observerChildSource.asObservable();
 
-  // baseUrl = 'http://localhost:3000/';
-  baseUrl = '/api/';
+  baseUrl = environment.baseUrl;
   constructor(private http: Http ) { }
   /*
   *   通过关键词搜索歌曲、歌手、专辑等

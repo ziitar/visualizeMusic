@@ -42,9 +42,12 @@ export class UserComponent implements OnInit {
   onLogin() {
     this.userService.login(this.model)
       .then(res => {
-        if (res !== 'false') {
+        console.log(typeof res.message);
+        if (res.message !== 'false') {
           this.user.emit(JSON.parse(res) as User);
           this.loginMessage = '登录成功，关闭弹框';
+        } else {
+          this.loginMessage = '用户名不存在或者密码错误';
         }
       })
       .catch(err => {

@@ -9,6 +9,7 @@ import { User } from './class/user';
 import { Subscription } from 'rxjs/Subscription';
 import {SearchService} from './service/search.service';
 import {SongService} from './service/song.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import {SongService} from './service/song.service';
 })
 export class AppComponent implements OnInit {
   playMusicStatus = {
+    name: '',
     url: '',
     played: false,
     rangeValue: 0,
@@ -56,9 +58,9 @@ export class AppComponent implements OnInit {
         if (res) {
           if (!res.headUrl) {
             if (res.sex === 'male') {
-              res.headUrl = 'http://localhost:2345/public/img/defaultMale.jpg';
+              res.headUrl = environment.imageUrl + 'defaultMale.jpg';
             }else {
-              res.headUrl = 'http://localhost:2345/public/img/defaultFemale.jpg';
+              res.headUrl = environment.imageUrl + 'defaultFemale.jpg';
             }
           }
           this.user = res;
@@ -181,9 +183,9 @@ export class AppComponent implements OnInit {
     this.user = user;
     if (!this.user.headUrl) {
       if (this.user.sex === 'male') {
-        this.user.headUrl = '/public/img/defaultMale.jpg';
+        this.user.headUrl = environment.imageUrl + 'defaultMale.jpg';
       }else {
-        this.user.headUrl = '/public/img/defaultFemale.jpg';
+        this.user.headUrl = environment.imageUrl + 'defaultFemale.jpg';
       }
     }
   }
@@ -213,6 +215,7 @@ export class AppComponent implements OnInit {
           this.song = null;
           this.preSong = null;
           this.playMusicStatus = {
+            name: '',
             url: '',
             played: false,
             rangeValue: 0,
