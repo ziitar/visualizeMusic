@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { User } from '../class/user';
-import {Observable} from 'rxjs/Observable';
+import { ResponseBody } from '../class/responseBody';
 import { environment } from '../../environments/environment';
 
 
@@ -15,34 +14,34 @@ export class UserService {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
-  getUser(): Promise<User> {
+  getUser(): Promise<ResponseBody> {
     return this.http.get(this.userUrl + 'user')
       .toPromise()
-      .then(res => res.json() as User)
+      .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
   /*
   *  登录
   * */
-  login(form: any): Promise<any> {
+  login(form: any): Promise<ResponseBody> {
     return this.http.post(this.userUrl + 'login', form)
       .toPromise()
-      .then(res => res.json())
+      .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
   /*
   *  注册
   * */
-  register(form: any): Promise<any> {
+  register(form: any): Promise<ResponseBody> {
     return this.http.post(this.userUrl + 'register', form)
       .toPromise()
-      .then(res => res.json())
+      .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
-  chickName(name: string): Promise<any> {
+  chickName(name: string): Promise<ResponseBody> {
     return this.http.get(this.userUrl + 'name?username=' + name)
       .toPromise()
-      .then(res => res.json())
+      .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
   signOut(): Promise<any> {

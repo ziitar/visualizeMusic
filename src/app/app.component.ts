@@ -55,15 +55,15 @@ export class AppComponent implements OnInit {
     * */
     this.userService.getUser()
       .then(res => {
-        if (res) {
-          if (!res.headUrl) {
-            if (res.sex === 'male') {
-              res.headUrl = environment.imageUrl + 'defaultMale.jpg';
+        if (res.status === 'SUCCESS') {
+          if (!res.result.headUrl) {
+            if (res.result.sex === 'male') {
+              res.result.headUrl = environment.imageUrl + 'defaultMale.jpg';
             }else {
-              res.headUrl = environment.imageUrl + 'defaultFemale.jpg';
+              res.result.headUrl = environment.imageUrl + 'defaultFemale.jpg';
             }
           }
-          this.user = res;
+          this.user = res.result;
         }
       });
     /*

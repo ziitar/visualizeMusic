@@ -42,9 +42,8 @@ export class UserComponent implements OnInit {
   onLogin() {
     this.userService.login(this.model)
       .then(res => {
-        console.log(typeof res.message);
-        if (res.message !== 'false') {
-          this.user.emit(JSON.parse(res) as User);
+        if (res.status === 'SUCCESS') {
+          this.user.emit(res.result as User);
           this.loginMessage = '登录成功，关闭弹框';
         } else {
           this.loginMessage = '用户名不存在或者密码错误';
@@ -60,9 +59,11 @@ export class UserComponent implements OnInit {
   onRegister() {
     this.userService.register(this.model)
       .then(res => {
-        if (res !== 'false') {
-          this.user.emit(JSON.parse(res) as User);
+        if (res.status === 'SUCCESS') {
+          this.user.emit(res.result as User);
           this.registerMessage = '注册成功，关闭弹框';
+        } else {
+          this.registerMessage = '注册失败，关闭弹框';
         }
       })
       .catch(err => {
@@ -75,7 +76,7 @@ export class UserComponent implements OnInit {
   checkUserName() {
     return this.userService.chickName(this.model.name)
       .then(res => {
-        if (res !== 'true') {
+        if (res.status === 'FAIL') {
           this.registerHelp.userName = '用户名已存在';
         }
       });
