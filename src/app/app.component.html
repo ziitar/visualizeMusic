@@ -33,7 +33,7 @@
         <div class="action">
           <div class="action-title" (click)="mine()">我创建的歌单</div>
           <div *ngSwitchCase="3">
-            <app-music-sheet [playSong]="song" [playSheet]="user?user.sheets:null" [sheetType]="3" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" ></app-music-sheet>
+            <app-music-sheet [playSong]="song" [playSheet]="user?user.sheets:[]" [sheetType]="3" (onPlayed)="choosePlay($event)" (onSheeted)="chooseSheet($event)" ></app-music-sheet>
             <div class="sheet-list" >
               <div class="create-sheet" data-toggle="modal" data-target="#sheet-modal">创建歌单</div>
             </div>

@@ -43,8 +43,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sheetService.getSheet().subscribe(res => {
-      this.sheets = res;
+    this.sheetService.getSheet().then(res => {
+      if (res.status === 'SUCCESS' ) {
+        this.sheets = res.result;
+      }else {
+        this.sheets = [];
+      }
     });
     // this.results = this.searchTerms
     //   .debounceTime(300)
@@ -64,7 +68,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   doSearch(keywords: string) {
     this.searchService.search(keywords)
       .subscribe(res => {
-        this.resulted = res;
+        if (res.status === 'SUCCESS') {
+          this.resulted = res.result;
+        }else {
+          this.resulted = null;
+        }
       });
   }
   selectSheet(num: number ) {
@@ -72,9 +80,13 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.resultIndex = num;
       this.searchService.getSheets()
         .subscribe(res => {
-          this.sheets = res;
-          if (this.sheets.length === 0) {
-            this.sheetMessage = '你还没有歌单';
+          if (res.status === 'SUCCESS') {
+            this.sheets = res.result;
+            if (this.sheets.length === 0) {
+              this.sheetMessage = '你还没有歌单';
+            }
+          }else {
+            this.sheets = [];
           }
         });
     }else {

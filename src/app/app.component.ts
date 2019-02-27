@@ -88,10 +88,11 @@ export class AppComponent implements OnInit {
     if (this.song.cloudMusicId) {
       this.songService.getUrl(this.song.cloudMusicId)
         .subscribe(res => {
-          this.playMusicStatus.url = res.toString().replace('http://m10.music.126.net/', '/cloudMusic/');
-          // this.playMusicStatus.url = res;
-          this.songService.songChange(this.song);
-          this.loadMusic();
+          if (res.status === 'SUCCESS') {
+            this.playMusicStatus.url = res.result.url.toString().replace('http://m10.music.126.net/', '/cloudMusic/');
+            this.songService.songChange(this.song);
+            this.loadMusic();
+          }
         });
     }else {
       this.playMusicStatus.url = this.musicUrlOffset + this.song.url;

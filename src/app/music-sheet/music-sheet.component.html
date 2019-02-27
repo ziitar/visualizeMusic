@@ -2,7 +2,7 @@
   <li *ngFor="let sheet of sheets; let i=index" [class.sheet-active]="i == selected"  (click)="select(i,sheet._id)">
     <div class="sheet">
       <div class="sheet-detail">
-        <div class="sheet-name">{{sheet.sheetName}}</div>
+        <div class="sheet-name">{{sheet.sheetName || '未知名称'}}</div>
         <div class="sheet-num">{{sheet.songNum}}首</div>
       </div>
       <div class="sheet-operation"></div>
@@ -15,6 +15,7 @@
         </div>
         <div class="music-operation" (click)="stopPropagation($event)"></div>
       </li>
+      <li *ngIf="sheet.songs.length === 0">暂无歌曲（快添加歌曲吧）</li>
     </ul>
   </li>
 </ul>

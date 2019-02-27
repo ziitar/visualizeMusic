@@ -24,27 +24,29 @@ export class LyricComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.songService.observerSource.subscribe(song => {
       if (song.cloudMusicId) {
-        this.songService.getLyric(song.cloudMusicId).subscribe(lyric => {
-          this.lyricMessage = null;
-          const constLyric = lyric.json().lyric.split('\n');
-          const reg = new RegExp(/(\d{2}:\d{2}.\d*)/, 'i');
-          let match ;
-          let LYR: Lyric;
-          this.lyrics = constLyric.map(res => {
-            match = reg.exec(res);
-            try {
-              LYR = {
-                time : match[0],
-                text : res.replace('[' + match[0] + ']', '')
-              };
-              return LYR;
-            }catch (e) {
-              return {
-                time: '',
-                text: res
-              };
-            }
-          });
+        this.songService.getLyric(song.cloudMusicId).subscribe(res => {
+          if (res.status === 'SUCCESS') {
+            this.lyricMessage = null;
+            const constLyric = res.result.json().lyric.split('\n');
+            const reg = new RegExp(/(\d{2}:\d{2}.\d*)/, 'i');
+            let match ;
+            let LYR: Lyric;
+            this.lyrics = constLyric.map(item => {
+              match = reg.exec(item);
+              try {
+                LYR = {
+                  time : match[0],
+                  text : item.replace('[' + match[0] + ']', '')
+                };
+                return LYR;
+              }catch (e) {
+                return {
+                  time: '',
+                  text: item
+                };
+              }
+            });
+          }
         });
       }else {
         this.lyricMessage = '找不到歌词';
@@ -56,7 +58,9 @@ export class LyricComponent implements OnInit, OnDestroy {
     this.songId$ = this.route.paramMap
       .switchMap((params: ParamMap) => {
         return this.songService.getLyric(params.get('id')).map(res => {
-          return res.json().lyric;
+          if ( res.status === 'SUCCESS') {
+            return res.result.lyric;
+          }
         });
       }
     );

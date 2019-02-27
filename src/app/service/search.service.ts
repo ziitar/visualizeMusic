@@ -7,6 +7,7 @@ import {SearchResult} from '../class/search-result';
 import {Subject } from 'rxjs/Subject';
 import {Sheet} from '../class/sheet';
 import { environment } from '../../environments/environment';
+import { ResponseBody } from '../class/responseBody';
 
 @Injectable()
 export class SearchService {
@@ -21,10 +22,10 @@ export class SearchService {
   /*
   *   通过关键词搜索歌曲、歌手、专辑等
   * */
-  search(term: string ): Observable<any> {
+  search(term: string ): Observable<ResponseBody> {
     return this.http
       .get(this.baseUrl + 'search?keywords=' + term)
-      .map(res => res.json() as SearchResult[]);
+      .map(res => res.json() as ResponseBody);
   }
   sendSheets(sheets: Sheet[]) {
     this.observerParentSource.next(sheets);
@@ -32,8 +33,8 @@ export class SearchService {
   updateSheets(sheets: Sheet[]) {
     this.observerChildSource.next(sheets);
   }
-  getSheets() {
+  getSheets(): Observable<ResponseBody> {
     return this.http.get(this.baseUrl + 'sheet')
-      .map(res => res.json() as Sheet[]);
+      .map(res => res.json() as ResponseBody);
   }
 }

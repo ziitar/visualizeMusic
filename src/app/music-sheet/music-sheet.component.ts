@@ -31,16 +31,24 @@ export class MusicSheetComponent implements OnInit {
     * */
     if (this.sheetType === 1) {
       this.sheetService.getRecommend()
-        .then(sheet => {
-          this.sheets = [sheet];
+        .then(res => {
+          if ( res.status === 'SUCCESS') {
+            this.sheets = [res.result];
+          }else {
+            this.sheets = [null];
+          }
         }).catch(err => {
           console.log(err);
         });
     }else if (this.sheetType === 2) {
     }else if (this.sheetType === 3) {
     }else if (this.sheetType === 4) {
-      this.sheetService.getLoveSheet().subscribe(sheets => {
-        this.sheets = sheets;
+      this.sheetService.getLoveSheet().subscribe(res => {
+        if ( res.status === 'SUCCESS') {
+          this.sheets = res.result;
+        }else {
+          this.sheets = null;
+        }
       });
     }
   }
@@ -48,7 +56,11 @@ export class MusicSheetComponent implements OnInit {
     if (this.selected !== selectId) {
       this.selected = selectId;
       this.sheetService.getSongsOfSheetById(id).subscribe(res => {
-        this.sheets[selectId] = res;
+        if ( res.status === 'SUCCESS' ) {
+          this.sheets[selectId] = res.result;
+        }else {
+          this.sheets[selectId] = null;
+        }
       });
     }else {
       this.selected = -1;

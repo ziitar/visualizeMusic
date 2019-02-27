@@ -5,6 +5,7 @@ import {Http} from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import {Song} from '../class/song';
 import { environment } from '../../environments/environment';
+import { ResponseBody } from '../class/responseBody';
 
 @Injectable()
 export class SongService {
@@ -17,12 +18,13 @@ export class SongService {
   /*
   *   通过网易云音乐id获取音乐播放地址
   * */
-  getUrl(song: number): Observable<any> {
+  getUrl(song: number): Observable<ResponseBody> {
     return this.http.get(this.baseUrl + 'musicUrl?id=' + song)
-      .map(res =>  res.json().url );
+      .map(res =>  res.json() as ResponseBody );
   }
-  getLyric(song: any): Observable<any> {
-    return this.http.get(this.baseUrl + 'lyric?id=' + song);
+  getLyric(song: any): Observable<ResponseBody> {
+    return this.http.get(this.baseUrl + 'lyric?id=' + song)
+      .map(res => res.json() as ResponseBody);
   }
   songChange(song: Song) {
     this.observerSource.next(song);
