@@ -42,16 +42,16 @@ export class SheetService {
   /*
   *   创建歌单
   * */
-  createSheet(form: any): Observable<any> {
+  createSheet(form: any): Observable<ResponseBody> {
     return this.http.post(this.baseUrl + 'sheet', form)
-      .map(res => res)
+      .map(res => res.json() as ResponseBody)
       .catch(err => {
         console.log(err);
-        return Observable.of<Sheet[]>([]);
+        return Observable.of<ResponseBody>();
       });
   }
-  addToSheet(data: any ): Observable<any> {
+  addToSheet(data: any ): Observable<ResponseBody> {
     return this.http.put(this.baseUrl + 'sheet', data)
-      .map(res => res);
+      .map(res => res.json() as ResponseBody);
   }
 }

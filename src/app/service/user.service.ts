@@ -44,10 +44,10 @@ export class UserService {
       .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
-  signOut(): Promise<any> {
+  signOut(): Promise<ResponseBody> {
     return this.http.get(this.userUrl + 'login')
       .toPromise()
-      .then(res => res['_body'])
+      .then(res => res.json() as ResponseBody)
       .catch(this.handleError);
   }
 }

@@ -194,8 +194,8 @@ export class AppComponent implements OnInit {
     if (this.user) {
       this.sheetService.createSheet(this.model)
         .subscribe(res => {
-          if (res.status === 200) {
-            this.user.sheets = res.json() as Sheet[];
+          if (res.status === 'SUCCESS') {
+            this.user.sheets = res.result as Sheet[];
             this.searchService.sendSheets(this.user.sheets);
             this.createSheetMessage = '创建成功关闭弹框';
           }else {
@@ -209,7 +209,7 @@ export class AppComponent implements OnInit {
   signOut() {
     this.userService.signOut()
       .then(res => {
-        if (JSON.parse(res).message === 'ok') {
+        if (res.status === 'SUCCESS') {
           this.audio.stop();
           this.user = null;
           this.sheet = null;

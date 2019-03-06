@@ -105,8 +105,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     };
     this.sheetService.addToSheet(data)
       .subscribe(res => {
-        console.log(res);
-        this.searchService.updateSheets(res.json() as Sheet[]);
+        if (res.status === 'SUCCESS') {
+          this.searchService.updateSheets(res.result as Sheet[]);
+        }
       }, err => {
         console.log(err);
       });
