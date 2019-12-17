@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MusicSheetComponent } from './music-sheet/music-sheet.component';
@@ -16,6 +16,7 @@ import { LyricComponent } from './lyric/lyric.component';
 import { CommentComponent } from './comment/comment.component';
 import { MainComponent } from './main/main.component';
 import {SongService} from './service/song.service';
+import { Interceptor } from './service/interceptors';
 
 const appRoutes: Routes = [
   { path: 'search', component: SearchComponent},
@@ -42,14 +43,14 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     FormsModule,
-    HttpModule,
     HttpClientModule
   ],
   providers: [
     SongService,
     SearchService,
     SheetService,
-    UserService
+    UserService,
+    [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }],
   ],
   bootstrap: [AppComponent]
 })

@@ -11,6 +11,8 @@ import {SearchService} from './service/search.service';
 import {SongService} from './service/song.service';
 import { environment } from '../environments/environment';
 
+const cloudMusicDomain = /^https?:\/\/m[0-9]\.music\.126\.net\//gi;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -31,8 +33,7 @@ export class AppComponent implements OnInit {
   audio: any;
   user: any;
   main = false;
-  musicUrlOffset = 'http://localhost:2345/public';
-  // musicUrlOffset = '/public';
+  musicUrlOffset = '/public';
   model = {
     sheetName: ''
   };
@@ -89,7 +90,7 @@ export class AppComponent implements OnInit {
       this.songService.getUrl(this.song.cloudMusicId)
         .subscribe(res => {
           if (res.status === 'SUCCESS') {
-            this.playMusicStatus.url = res.result.url.toString().replace('http://m10.music.126.net/', '/cloudMusic/');
+            this.playMusicStatus.url = res.result.url;
             this.songService.songChange(this.song);
             this.loadMusic();
           }

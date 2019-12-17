@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import {Sheet} from '../class/sheet';
@@ -10,11 +10,11 @@ import { ResponseBody } from '../class/responseBody';
 @Injectable()
 export class SheetService {
   baseUrl = environment.baseUrl;
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
   getRecommend(): Promise<ResponseBody> {
     return this.http.get(this.baseUrl + 'recommend')
       .toPromise()
-      .then(res => res.json() as ResponseBody);
+      .then(res => res as ResponseBody);
   }
   /*
   *   获取用户歌单
@@ -22,18 +22,18 @@ export class SheetService {
   getSheet(): Promise<ResponseBody> {
     return this.http.get(this.baseUrl + 'sheet')
       .toPromise()
-      .then( res => res.json() as ResponseBody);
+      .then( res => res as ResponseBody);
   }
   getSongsOfSheetById(id: string): Observable<ResponseBody> {
     return this.http.get(this.baseUrl + 'song?id=' + id)
-      .map(res => res.json() as ResponseBody)
+      .map(res => res as ResponseBody)
       .catch(err => {
         return Observable.of<ResponseBody>();
       });
   }
   getLoveSheet(): Observable<ResponseBody> {
     return this.http.get(this.baseUrl + 'loveSheet')
-      .map(res => res.json() as ResponseBody)
+      .map(res => res as ResponseBody)
       .catch(err => {
         console.log(err);
         return Observable.of<ResponseBody>();
@@ -44,7 +44,7 @@ export class SheetService {
   * */
   createSheet(form: any): Observable<ResponseBody> {
     return this.http.post(this.baseUrl + 'sheet', form)
-      .map(res => res.json() as ResponseBody)
+      .map(res => res as ResponseBody)
       .catch(err => {
         console.log(err);
         return Observable.of<ResponseBody>();
@@ -52,6 +52,6 @@ export class SheetService {
   }
   addToSheet(data: any ): Observable<ResponseBody> {
     return this.http.put(this.baseUrl + 'sheet', data)
-      .map(res => res.json() as ResponseBody);
+      .map(res => res as ResponseBody);
   }
 }

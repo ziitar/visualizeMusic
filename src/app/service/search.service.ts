@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
 import {SearchResult} from '../class/search-result';
@@ -18,14 +18,14 @@ export class SearchService {
   observerChild$ = this.observerChildSource.asObservable();
 
   baseUrl = environment.baseUrl;
-  constructor(private http: Http ) { }
+  constructor(private http: HttpClient ) { }
   /*
   *   通过关键词搜索歌曲、歌手、专辑等
   * */
   search(term: string ): Observable<ResponseBody> {
     return this.http
       .get(this.baseUrl + 'search?keywords=' + term)
-      .map(res => res.json() as ResponseBody);
+      .map(res => res as ResponseBody);
   }
   sendSheets(sheets: Sheet[]) {
     this.observerParentSource.next(sheets);
@@ -35,6 +35,6 @@ export class SearchService {
   }
   getSheets(): Observable<ResponseBody> {
     return this.http.get(this.baseUrl + 'sheet')
-      .map(res => res.json() as ResponseBody);
+      .map(res => res as ResponseBody);
   }
 }
